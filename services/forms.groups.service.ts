@@ -25,6 +25,9 @@ export interface FormGroup extends BaseModelInterface {
     DbConnection({
       collection: 'formGroups',
       rest: false,
+      cache: {
+        enabled: true,
+      },
     }),
   ],
 
