@@ -1,7 +1,7 @@
 'use strict';
 
 import moleculer, { Context } from 'moleculer';
-import { Service } from 'moleculer-decorators';
+import { Action, Service } from 'moleculer-decorators';
 
 import DbConnection from '../mixins/database.mixin';
 
@@ -24,6 +24,7 @@ export interface FormGroup extends BaseModelInterface {
   mixins: [
     DbConnection({
       collection: 'formGroups',
+      rest: false,
     }),
   ],
 
@@ -77,4 +78,14 @@ export interface FormGroup extends BaseModelInterface {
     defaultScopes: [...COMMON_DEFAULT_SCOPES, 'noParent'],
   },
 })
-export default class FormsGroupsService extends moleculer.Service {}
+export default class FormsGroupsService extends moleculer.Service {
+  @Action({
+    rest: 'GET /',
+  })
+  getAll(ctx: Context<{}>) {
+    return ctx.call('forms.groups.find', {
+      ...(ctx.params || {}),
+      sort: 'name',
+    });
+  }
+}
