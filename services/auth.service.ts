@@ -61,9 +61,9 @@ export default class AuthService extends moleculer.Service {
       type: user.type,
     };
 
-    if (authUser?.permissions?.TOURISM) {
+    if (authUser?.permissions?.RISR) {
       data.permissions = {
-        TOURISM: authUser.permissions.TOURISM,
+        RISR: authUser.permissions.RISR,
       };
     }
 
