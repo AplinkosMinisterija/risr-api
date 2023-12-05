@@ -282,6 +282,8 @@ export default class TenantsService extends moleculer.Service {
 
 
     if(!ownerRequired){
+      if (!authGroup?.id) return;
+
       const tenant: Tenant = await ctx.call('tenants.findOrCreate', {
         authGroup: authGroup,
         email: companyEmail,
