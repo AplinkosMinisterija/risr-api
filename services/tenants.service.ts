@@ -244,6 +244,7 @@ export default class TenantsService extends moleculer.Service {
       companyCode: 'string',
       companyPhone: 'string',
       companyEmail: 'string',
+      ownerRequired:"boolean|optional"
     },
     types: EndpointType.ADMIN,
   })
@@ -259,6 +260,7 @@ export default class TenantsService extends moleculer.Service {
         lastName: string;
         companyEmail: string;
         companyPhone: string;
+        ownerRequired:boolean;
       },
       UserAuthMeta
     >
@@ -273,9 +275,26 @@ export default class TenantsService extends moleculer.Service {
       lastName,
       companyEmail,
       companyPhone,
+      ownerRequired
     } = ctx.params;
 
     const authGroup: any = await ctx.call('auth.users.invite', { companyCode });
+
+
+    if(!ownerRequired){
+      const tenant: Tenant = await ctx.call('tenants.findOrCreate', {
+        authGroup: authGroup,
+        email: companyEmail,
+        phone: companyPhone,
+        name: companyName,
+      });
+
+      return tenant
+    }
+
+
+
+
     const authUser: any = await ctx.call('auth.users.invite', {
       companyId: authGroup.id,
       personalCode: personalCode,
